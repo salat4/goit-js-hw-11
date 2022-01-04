@@ -68,7 +68,7 @@ await axios.get(`${BASE_URL}?key=${KEY}&q=${refs.input.value}&${PARAMS_SEARCH}&p
             
                const Arr = value.data.hits.map((e) => {
                 return `<div class="photo-card">
-                   <a href = ${e.largeImageURL}> <img src="${e.webformatURL}" alt="${e.tags}" loading="lazy" /> </a>
+                   <a href = ${e.largeImageURL}> <img src="${e.webformatURL}" alt="${e.tags}" loading="lazy" width = 640 height = 460 /> </a>
                     <div class="info">
                     <p class="info-item">
                     <b>Likes:${e.likes}</b>
@@ -99,4 +99,3 @@ await axios.get(`${BASE_URL}?key=${KEY}&q=${refs.input.value}&${PARAMS_SEARCH}&p
         })
     
 }
-    
