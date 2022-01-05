@@ -22,30 +22,38 @@ refs.form.addEventListener('submit', render)
 // refs.loadMore.addEventListener('click',loadMore )
 let page = 1;
 let qwe = 0;
+let totalPage = null;
+let asd = 0;
 // let count = 1;
 function render(e) {
-    window.addEventListener("scroll", (()=>{     
-                let contentHeight = refs.gallery.offsetHeight;  
-                let yOffset       = window.pageYOffset;
-                let window_height = window.innerHeight;
-                let y             = yOffset + window_height;
-                if(y >= contentHeight)
-                {
-                    page+=1
-                    takeBack(page)
+    window.addEventListener("scroll", (() => {
+        let contentHeight = refs.gallery.offsetHeight;
+        let yOffset = window.pageYOffset;
+        let window_height = window.innerHeight;
+        let y = yOffset + window_height;
+        if (y >= contentHeight) {
+            page += 1
+            takeBack(page)
 
-                    console.log(page)
-                }
-                // return;
+        }
+        // return;
     })
     )
     // refs.loadMore.classList.add('visible')
     refs.gallery.innerHTML = ""
     e.preventDefault();
-    takeBack() 
-    setTimeout(() => {Notiflix.Notify.success(`Hooray! We found ${qwe} images `) },500)
- //   refs.loadMore.classList.remove('invis')
+            
+    if (page === 1 && asd > 0) { 
+
+
+    }
+
+    setTimeout(()=>Notiflix.Notify.success(`Hoorey! We found ${qwe} images`),500)
+    
+    takeBack()
 }
+ //   refs.loadMore.classList.remove('invis')
+
 
 // function loadMore() { 
 //         page+=1
@@ -54,20 +62,34 @@ function render(e) {
 // }
 async function takeBack(page) { 
   //  console.log(count)
-await axios.get(`${BASE_URL}?key=${KEY}&q=${refs.input.value}&${PARAMS_SEARCH}&page=${page}`)
-    .then((value) => {
-        qwe = value.data.totalHits
-        //  console.log(value)
-        console.log("length:", value.data.hits.length);
-        console.log(page)
-        if (value.data.hits.length < 1) {
-            // console.log(value.data.hits.length)
-            Notiflix.Notify.warning(`We're sorry, but you've reached the end of search results.`)               
-        }
-        else {
+    
+        await axios.get(`${BASE_URL}?key=${KEY}&q=${refs.input.value}&${PARAMS_SEARCH}&page=${page}`)
+            .then((value) => {
+                totalPage = Math.ceil(value.data.totalHits / 40)
+                console.log("totalPage:", totalPage);
+                console.log("page:", page);
+                qwe = value.data.totalHits
+                asd = value.data.hits.length
+                if (page > totalPage) {
+                            
+                            Notiflix.Notify.info("We're sorry, but you've reached the end of search results.");
+                            
+                        }
+                    if (value.data.hits.length === 0) {
+                        Notiflix.Notify.failure('Sorry, there are no images matching your search query. Please try again.');
+                        return;
+                        }
+
+                        
+
+                        
+                       // console.log(qwe)
+                        
+                        
+               
             
-               const Arr = value.data.hits.map((e) => {
-                return `<div class="photo-card">
+                    const Arr = value.data.hits.map((e) => {
+                        return `<div class="photo-card">
                    <a href = ${e.largeImageURL}> <img src="${e.webformatURL}" alt="${e.tags}" loading="lazy" width = 640 height = 460 /> </a>
                     <div class="info">
                     <p class="info-item">
@@ -84,18 +106,14 @@ await axios.get(`${BASE_URL}?key=${KEY}&q=${refs.input.value}&${PARAMS_SEARCH}&p
                     </p>
                     </div>
                     </div>`
-            })
+                    })
         
-        refs.gallery.insertAdjacentHTML("beforeend", Arr.join(""))
+                    refs.gallery.insertAdjacentHTML("beforeend", Arr.join(""))
                
-    }
+                
          
-         let lightbox = new SimpleLightbox('.gallery a')
+                let lightbox = new SimpleLightbox('.gallery a')
             
-        })
-        .catch((error) => { 
-            console.log(error)
-            Notiflix.Notify.failure("Sorry, there are no images matching your search query. Please try again.")
-        })
-    
-}
+            })
+    }
+     
