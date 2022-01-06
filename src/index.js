@@ -52,10 +52,9 @@ async function render(e) {
     // refs.gallery.addEventListener('click', ((e) => { 
     // e.preventDefault();  
     refs.gallery.innerHTML = ""
-    console.log(asd)
+    //console.log(asd)
     takeBack()
     page = 1
-    asd = 0 
    // console.log("QWEsubmit:", page);
     
     // }))
