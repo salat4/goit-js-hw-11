@@ -19,7 +19,7 @@ const KEY = '25099977-05a832f59cefe7e3a7990f935'
 const BASE_URL = 'https://pixabay.com/api/'
 const PARAMS_SEARCH = 'image_type=photo&orientation=horizontal&safesearch=true&per_page=40'
 refs.form.addEventListener('submit', render)
-
+window.addEventListener("scroll",renderScroll)
 // refs.loadMore.addEventListener('click',loadMore )
 let page = 1;
 let qwe = 0;
@@ -28,29 +28,36 @@ let asd = 0;
     
 let lightbox = new SimpleLightbox('.gallery a');
 
-
-async function render(e) {
-    
-    e.preventDefault(); 
-    window.addEventListener("scroll", (() => {
+function renderScroll(e) { 
          e.preventDefault(); 
         let contentHeight = refs.gallery.offsetHeight;
         let yOffset = window.pageYOffset;
         let window_height = window.innerHeight;
         let y = yOffset + window_height;
-        if (y >= contentHeight) {
+        if (y >= contentHeight ) {
             page += 1
+         //   console.log("Windowsubmit:", page);
             takeBack(page)
             lightbox.refresh();
         }
-    })
-    )
+    
+    
+}
+
+async function render(e) {
+    
+    e.preventDefault(); 
+ //   console.log("submit:", page);
     // refs.loadMore.classList.add('visible')
     // refs.gallery.addEventListener('click', ((e) => { 
     // e.preventDefault();  
     refs.gallery.innerHTML = ""
-    takeBack()  
+    console.log(asd)
+    takeBack()
     page = 1
+    asd = 0 
+   // console.log("QWEsubmit:", page);
+    
     // }))
            
 }
@@ -66,7 +73,7 @@ async function render(e) {
 // }
 async function takeBack(page) { 
    
-    
+   // console.log("reset:", page);
 
         await axios.get(`${BASE_URL}?key=${KEY}&q=${refs.input.value}&${PARAMS_SEARCH}&page=${page}`)
             .then((value) => {
